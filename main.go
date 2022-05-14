@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 )
 
 var global = "Cibai"
@@ -30,7 +32,12 @@ func main() {
 	fmt.Println(names[0])
 	util.Cabecabean()
 	fmt.Println(util.GlobalTiket)
+
+	var orang = Orang{firstName: "rere", lastName: "hoho", qty: 10, cibabababai: mapData}
+	fmt.Println(orang.firstName)
 	for {
+		wg.Add(1)
+		go longTime() //create new thread
 		fmt.Println("Welcome Ticket Manager")
 		fmt.Println("Remaining :", total)
 		fmt.Println("Want to Buy ", remaining, "?")
@@ -54,7 +61,7 @@ func main() {
 			continue
 		}
 	}
-
+	wg.Wait()
 }
 
 func multipleReturn(name string) (string, string, string) { //multiple return value
@@ -71,3 +78,11 @@ type Orang struct { //kaya data class di kotlin
 	qty         uint
 	cibabababai map[string]string
 }
+
+func longTime() {
+	time.Sleep(3 * time.Second)
+	fmt.Println("Long")
+	wg.Done()
+}
+
+var wg = sync.WaitGroup{}
